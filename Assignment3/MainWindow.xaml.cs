@@ -178,7 +178,14 @@ namespace Assignment3
             // When we select a city, update the GUI with the cinemas in the currently selected city.
             cityComboBox.SelectionChanged += (sender, e) =>
             {
-                UpdateCinemaList();
+                if (cityComboBox.SelectedItem.ToString() == "Cinemas within 100 km")
+                {
+                    ShowCinemasWithin100km();
+                }
+                else
+                {
+                    UpdateCinemaList();
+                }
             };
 
             // Create the dropdown of cinemas.
@@ -301,6 +308,33 @@ namespace Assignment3
             foreach (string cinema in GetCinemasInSelectedCity())
             {
                 cinemaListBox.Items.Add(cinema);
+            }
+        }
+
+        private async void ShowCinemasWithin100km()
+        {
+            cinemaListBox.Items.Clear();
+            GeolocationAccessStatus accessStatus = await Geolocator.RequestAccessAsync();
+            // The variable `position` now contains the latitude and longitude.
+            Geoposition position = await new Geolocator().GetGeopositionAsync();
+
+            foreach (var cinema in database.Cinemas)
+            {
+                var coord1 = new GeographyTools.Coordinate
+                { Latitude = position.Coordinate.Latitude, Longitude = position.Coordinate.Longitude };
+                var coord2 = new GeographyTools.Coordinate
+                { Latitude = cinema.Coordinate.Latitude, Longitude = cinema.Coordinate.Longitude };
+                
+                var distance = Geography.Distance(coord1, coord2);
+
+                if (distance > 100000)
+                {
+                    //Do nothing
+                }
+                else
+                {
+                    cinemaListBox.Items.Add(cinema.Name);                 
+                }
             }
         }
 
