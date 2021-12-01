@@ -17,9 +17,9 @@ namespace PopulateDatabase
             CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
 
             // Clear the database.
-            database.Movies.RemoveRange(database.Movies.Where(m => m.ID > -1));
-            database.Cinemas.RemoveRange(database.Cinemas.Where(c => c.ID > -1));
-            database.Screenings.RemoveRange(database.Screenings.Where(s => s.ID > -1));
+            database.Movies.RemoveRange(database.Movies);
+            database.Cinemas.RemoveRange(database.Cinemas);
+            database.Screenings.RemoveRange(database.Screenings);
             database.SaveChanges();
 
             // Load movies.
@@ -54,7 +54,6 @@ namespace PopulateDatabase
             database.SaveChanges();
 
             // Generate random screenings.
-
             // Get all cinema IDs.
             var cinemaIDs = new List<int>();
             var cinema = database.Cinemas.Select(c => c.ID);

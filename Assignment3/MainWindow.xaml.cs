@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -180,7 +179,7 @@ namespace Assignment3
             {
                 if (cityComboBox.SelectedItem.ToString() == "Cinemas within 100 km")
                 {
-                    ShowCinemasWithin100km();
+                    ShowCinemasWithin100kmAsync();
                 }
                 else
                 {
@@ -311,17 +310,17 @@ namespace Assignment3
             }
         }
 
-        private async void ShowCinemasWithin100km()
+        private async void ShowCinemasWithin100kmAsync()
         {
             cinemaListBox.Items.Clear();
             GeolocationAccessStatus accessStatus = await Geolocator.RequestAccessAsync();
             // The variable `position` now contains the latitude and longitude.
             Geoposition position = await new Geolocator().GetGeopositionAsync();
+            var coord1 = new GeographyTools.Coordinate
+            { Latitude = position.Coordinate.Latitude, Longitude = position.Coordinate.Longitude };
 
             foreach (var cinema in database.Cinemas)
-            {
-                var coord1 = new GeographyTools.Coordinate
-                { Latitude = position.Coordinate.Latitude, Longitude = position.Coordinate.Longitude };
+            {                
                 var coord2 = new GeographyTools.Coordinate
                 { Latitude = cinema.Coordinate.Latitude, Longitude = cinema.Coordinate.Longitude };
                 
