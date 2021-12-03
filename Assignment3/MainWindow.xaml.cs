@@ -64,15 +64,7 @@ namespace Assignment3
         [Required]
         public Coordinate Coordinate { get; set; }
         public List<Screening> Screenings { get; set; }
-    }
-
-    [Owned]
-    public class Coordinate
-    {
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
-        public double Altitude { get; set; }
-    }
+    }      
 
     public class AppDbContext : DbContext
     {
@@ -92,6 +84,20 @@ namespace Assignment3
             builder.Entity<Cinema>()
                 .HasIndex(c => c.Name)
                 .IsUnique();
+
+            builder.Entity<Cinema>()
+                .OwnsOne(Cinema => Cinema.Coordinate)
+                .Property(c => c.Latitude)
+                .HasColumnName("Latitude");
+
+            builder.Entity<Cinema>()
+                .OwnsOne(Cinema => Cinema.Coordinate)
+                .Property(c => c.Longitude)
+                .HasColumnName("Longitude");
+
+            builder.Entity<Cinema>()
+                .OwnsOne(Cinema => Cinema.Coordinate)
+                .Ignore(c => c.Altitude);         
         }
     }
 
@@ -278,12 +284,7 @@ namespace Assignment3
         // Get a list of all cities that have cinemas in them.
         private IEnumerable<string> GetCities()
         {
-            var cityObjects = database.Cinemas.Select(c => c.City).Distinct().ToList();
-            var cities = new List<string>();
-            foreach (var city in cityObjects)
-            {
-                cities.Add(city);
-            }
+            var cities = database.Cinemas.Select(c => c.City).Distinct();
             return cities;
         }
 
@@ -291,12 +292,7 @@ namespace Assignment3
         private IEnumerable<string> GetCinemasInSelectedCity()
         {
             string currentCity = (string)cityComboBox.SelectedItem;
-            var cinemaObjects = database.Cinemas.Where(c => c.City == currentCity).ToList();
-            var cinemas = new List<string>();
-            foreach (var cinema in cinemaObjects)
-            {
-                cinemas.Add(cinema.Name);
-            }
+            var cinemas = database.Cinemas.Where(c => c.City == currentCity).Select(c => c.Name);
             return cinemas;
         }
 
@@ -351,8 +347,7 @@ namespace Assignment3
             var screenings = database.Screenings
                 .Include(s => s.Cinema)
                 .Include(s => s.Movie)
-                .Where(s => s.Cinema.ID == cinemaID)
-                .ToList();
+                .Where(s => s.Cinema.ID == cinemaID);
 
             // For each screening:
             foreach (var screening in screenings)
@@ -455,8 +450,7 @@ namespace Assignment3
             ticketPanel.Children.Clear();
             var tickets = database.Tickets
                 .Include(t => t.Screening).ThenInclude(s => s.Cinema)
-                .Include(t => t.Screening).ThenInclude(s => s.Movie)
-                .ToList();
+                .Include(t => t.Screening).ThenInclude(s => s.Movie);
 
             // For each ticket:
             foreach (var ticket in tickets)

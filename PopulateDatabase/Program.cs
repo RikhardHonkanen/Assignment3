@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using Assignment3;
+using GeographyTools;
 
 namespace PopulateDatabase
 {
@@ -47,7 +48,6 @@ namespace PopulateDatabase
                 Coordinate cinemaCoordinate = new Coordinate();
                 cinemaCoordinate.Latitude = double.Parse(values[2]);
                 cinemaCoordinate.Longitude = double.Parse(values[3]);
-                cinemaCoordinate.Altitude = 0;
                 newCinema.Coordinate = cinemaCoordinate;
                 database.Add(newCinema);
             }

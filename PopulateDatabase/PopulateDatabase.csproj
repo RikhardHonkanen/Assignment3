@@ -16,6 +16,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="GeographyTools">
+      <HintPath>..\..\DataAccessAssignment3\DataAccessAssignment3\GeographyTools.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="SampleCinemasWithPositions.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
