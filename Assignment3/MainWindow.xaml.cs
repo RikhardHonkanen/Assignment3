@@ -284,16 +284,14 @@ namespace Assignment3
         // Get a list of all cities that have cinemas in them.
         private IEnumerable<string> GetCities()
         {
-            var cities = database.Cinemas.Select(c => c.City).Distinct();
-            return cities;
+            return database.Cinemas.Select(c => c.City).Distinct();
         }
 
         // Get a list of all cinemas in the currently selected city.
         private IEnumerable<string> GetCinemasInSelectedCity()
         {
             string currentCity = (string)cityComboBox.SelectedItem;
-            var cinemas = database.Cinemas.Where(c => c.City == currentCity).Select(c => c.Name);
-            return cinemas;
+            return database.Cinemas.Where(c => c.City == currentCity).Select(c => c.Name);
         }
 
         // Update the GUI with the cinemas in the currently selected city.
