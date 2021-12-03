@@ -345,7 +345,8 @@ namespace Assignment3
             var screenings = database.Screenings
                 .Include(s => s.Cinema)
                 .Include(s => s.Movie)
-                .Where(s => s.Cinema.ID == cinemaID);
+                .Where(s => s.Cinema.ID == cinemaID)
+                .ToList();
 
             // For each screening:
             foreach (var screening in screenings)
@@ -448,7 +449,8 @@ namespace Assignment3
             ticketPanel.Children.Clear();
             var tickets = database.Tickets
                 .Include(t => t.Screening).ThenInclude(s => s.Cinema)
-                .Include(t => t.Screening).ThenInclude(s => s.Movie);
+                .Include(t => t.Screening).ThenInclude(s => s.Movie)
+                .ToList();
 
             // For each ticket:
             foreach (var ticket in tickets)
